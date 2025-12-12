@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def download_file(url: str, save_dir: str = 'data'):
+def download_file(url: str, save_dir: str):
     '''
     Downloads a file from the given URL and saves it to the specified dir.
     Args:
@@ -34,7 +34,7 @@ def download_file(url: str, save_dir: str = 'data'):
                           total=int(response.headers.get('content-length', 0))):
             file.write(chunk)
 
-def download_files(urls: list[str], save_dir: str = 'data'):
+def download_files(urls: list[str], save_dir: str):
     '''
     Downloads multiple files from the given list of URLs.
     Args:
@@ -52,7 +52,7 @@ def download_files(urls: list[str], save_dir: str = 'data'):
 
 if __name__ == '__main__':
     files_to_download = [url.strip() for url in os.getenv('DATASET_URLS', '').split(',')]
+    raw_data_dir = os.getenv('RAW_DATA_DIR', 'data/raw')
     print(files_to_download)
-    download_dir = 'data'
     if files_to_download:
-        download_files(files_to_download, download_dir)
+        download_files(files_to_download, raw_data_dir)
