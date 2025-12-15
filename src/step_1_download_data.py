@@ -2,10 +2,8 @@ import requests
 from tqdm import tqdm
 from os import path
 import os
+import argparse
 from src.utils.logging import log_info, log_error
-from dotenv import load_dotenv
-
-load_dotenv()
 
 def download_file(url: str, save_dir: str):
     '''
@@ -51,8 +49,10 @@ def download_files(urls: list[str], save_dir: str):
             log_error(f'Error downloading {url}: {e}')
 
 if __name__ == '__main__':
-    files_to_download = [url.strip() for url in os.getenv('DATASET_URLS', '').split(',')]
-    raw_data_dir = os.getenv('RAW_DATA_DIR', 'data/raw')
-    print(files_to_download)
-    if files_to_download:
-        download_files(files_to_download, raw_data_dir)
+    parser = argparse.ArgumentParser(description='Download dataset files from specified URLs.')
+    parser.add_argument('--urls', type=str, nargs='+', required=True, help='List of URLs to download files from.')
+    parser.add_argument('--save_dir', type=str, default='data/raw', help='Directory to save downloaded files.')
+    args = parser.parse_args()
+
+    if args.urls:
+        download_files(args.urls, args.save_dir)

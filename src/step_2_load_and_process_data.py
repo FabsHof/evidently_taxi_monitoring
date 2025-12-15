@@ -2,11 +2,9 @@ import pandas as pd
 import os
 from os import path
 from src.utils.logging import log_info, log_error, log_warning
-from dotenv import load_dotenv
+import argparse
 
-load_dotenv()
-
-def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
+def process_df(df: pd.DataFrame) -> pd.DataFrame:
     '''
     Preprocesses the taxi trip data.
     Args:
@@ -25,7 +23,7 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-def main(raw_data_dir: str, processed_data_dir: str, valid_file_formats: list = ['parquet', 'csv']) -> None:
+def load_and_process_data(raw_data_dir: str, processed_data_dir: str, valid_file_formats: list = ['parquet', 'csv']) -> None:
     '''
     Main function to load, preprocess, and save the data.
     Args:
@@ -48,12 +46,16 @@ def main(raw_data_dir: str, processed_data_dir: str, valid_file_formats: list = 
                 log_warning(f'Skipping unsupported file format: {file}')
                 continue
 
-            preprocessed_df = preprocess_data(df)
+            preprocessed_df = process_df(df)
             output_path = path.join(processed_data_dir, f'processed_{file}')
             preprocessed_df.to_parquet(output_path, index=False)
             log_info(f'Preprocessed data saved to {output_path}')
 
 if __name__ == '__main__':
-    raw_data_dir = os.getenv('RAW_DATA_DIR', 'data/raw')
-    processed_data_dir = os.getenv('PROCESSED_DATA_DIR', 'data/processed')
-    main(raw_data_dir, processed_data_dir)
+    parser = argparse.ArgumentParser(description='Load, preprocess, and save taxi trip data.')
+    parser.add_argument('--raw_data_dir', type=str, default='data/raw', help='Directory where raw data files are stored.')
+    parser.add_argument('--processed_data_dir', type=str, default='data/processed', help='Directory where processed data files will be saved.')
+    parser.add_argument('--valid_file_formats', type=str, nargs='+', default=['parquet', 'csv'], help='List of valid file formats to process.')
+    args = parser.parse_args()
+
+    load_and_process_data(args.raw_data_dir, args.processed_data_dir, args.valid_file_formats)
