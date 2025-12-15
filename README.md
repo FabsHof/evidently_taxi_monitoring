@@ -47,4 +47,21 @@ The dataset used for this project is the [NYC Taxi Trip dataset]()
    ```bash
    make step_1_download_data
    ```
+2. Preprocess data:
+   ```bash
+   make step_2_preprocess_data
+   ```
+3. Train and evaluate model:
+   ```bash
+   make step_3_train_and_evaluate_model
+   ```
+4. Generate report:
+   ```bash
+   # Intended to be run within the main pipeline
+   make step_4_generate_report
+   ```
+5. Run the complete pipeline:
+   ```bash
+   make run_pipeline
+   ```
      
