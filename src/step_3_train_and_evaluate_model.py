@@ -117,7 +117,8 @@ if __name__ == '__main__':
     parser.add_argument('--valid_file_formats', type=str, nargs='+', default=['.csv', '.parquet'], help='List of valid file formats to process.')
     parser.add_argument('--base_model_path', type=str, help='Path to an existing model file.')
     parser.add_argument('--target', type=str, default='duration_min', help='Target variable for prediction.')
-    parser.add_argument('--features', type=str, nargs='+', default=['passenger_count', 'trip_distance', 'fare_amount', 'total_amount', 'PULocationID', 'DOLocationID'], help='List of feature names.')
+    parser.add_argument('--num_features', type=str, nargs='+', default=['passenger_count', 'trip_distance', 'fare_amount', 'total_amount'], help='List of numerical feature names.')
+    parser.add_argument('--cat_features', type=str, nargs='+', default=['PULocationID', 'DOLocationID'], help='List of categorical feature names.')
     args = parser.parse_args()
 
     last_model_filename, results = train_and_evaluate(args.processed_data_dir, args.models_dir, args.features, args.target, base_model_path=args.base_model_path, valid_file_formats=args.valid_file_formats)
